@@ -17,7 +17,7 @@ defmodule Sector7gWeb.Router do
   scope "/", Sector7gWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", DaysSinceLive, :home
   end
 
   # Other scopes may use custom stacks.

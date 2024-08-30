@@ -1,12 +1,10 @@
 defmodule Sector7g.DaysSince do
   @moduledoc """
-  GenServer for keeping track of days since
+  GenServer for keeping track of days since INCIDENT
   """
-
   # =============================
   # CLIENT
   # =============================
-  require Logger
   use GenServer
 
   def start_link(incident \\ "Incident") do
@@ -31,6 +29,7 @@ defmodule Sector7g.DaysSince do
   end
 
   def handle_cast(:reset, state) do
+    # TODO conjure useless metrics for this
     {:noreply, state |> Map.put(:last_incident, DateTime.utc_now())}
   end
 
