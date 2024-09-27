@@ -46,31 +46,24 @@ defmodule Sector7g.Incident do
   end
 
   def get_incident_by_name(name) do
-    case Sector7g.Repo.get_by!(Incident, name: name) do
-      nil -> {:error, :not_found} # TODO better error
-      record -> {:ok, record}
-      end
+    # This helper function is meant to ensure Ecto.NoResultsError being thrown
+    Sector7g.Repo.get_by!(Incident, name: name)
   end
 
-  def calculate_days_since(utc_timestamp) do
+  def reset_incident_counter_by_name(name) do
+    case Incident.get_incident_by_name(name)
+    |> Sector7g.Incident.changeset(%{last_incident: DateTime.utc_now()})
+    |> Sector7g.Repo.update() do
+      {:ok, reset_counter} ->
+        # TODO look into why this does not seem to propogate to the frontend
+        Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
+        {:ok, reset_counter}
+      {:error, error_changeset} -> {:error, error_changeset.errors}
+    end
+  end
+
+  def calculate_days_since_timestamp(utc_timestamp) do
     DateTime.utc_now()
     |> DateTime.diff(utc_timestamp, :day)
-  end
-
-  def reset_incident_counter(name) do
-    # TODO we probably should not be doing case within a case
-    case Sector7g.Repo.get_by(Incident, name: name) do
-      nil -> {:error, :not_found} # TODO better error
-      record ->
-        case record
-        |> Incident.changeset(%{incident_date: DateTime.utc_now()})
-        |> Sector7g.Repo.update()
-        do
-          {:ok, reset_counter} ->
-            # TODO look into why this does not seem to propogate to the frontend
-            Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
-            {:ok, reset_counter}
-        end
-    end
   end
 end
