@@ -4,6 +4,8 @@
 
 /* This file is for your main application CSS */
 
+/* Incident view */
+
 .incident-counter {
   display: flex;
   flex-direction: column;
@@ -48,4 +50,41 @@
 
 .reset-button:hover {
   background-color: #c0392b;
+}
+
+/* Index */
+
+.incident-index {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.incident-index h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.incident-index ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.incident-item {
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.incident-name {
+  font-weight: bold;
+}
+
+.incident-date {
+  font-size: 14px;
+  color: #666;
 }

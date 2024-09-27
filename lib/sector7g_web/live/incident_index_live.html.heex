@@ -1,0 +1,11 @@
+<div class="incident-index">
+  <h1>Registered Incidents</h1>
+  <ul>
+    <%= for incident <- @incidents do %>
+      <li class="incident-item">
+        <span class="incident-name"><%= incident.name %></span>
+        <span class="incident-date">Last incident: <%= Calendar.strftime(incident.last_incident, "%Y-%m-%d") %></span>
+      </li>
+    <% end %>
+  </ul>
+</div>
