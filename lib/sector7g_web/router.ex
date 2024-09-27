@@ -1,5 +1,6 @@
 defmodule Sector7gWeb.Router do
   use Sector7gWeb, :router
+  import Phoenix.LiveView.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -17,7 +18,8 @@ defmodule Sector7gWeb.Router do
   scope "/", Sector7gWeb do
     pipe_through :browser
 
-    live "/", DaysSinceLive, :home
+    live "/", IncidentIndexLive, :home
+    live "/:name", DaysSinceLive
   end
 
   # Other scopes may use custom stacks.
