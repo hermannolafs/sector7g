@@ -1,7 +1,7 @@
 <div class="incident-counter">
   <h1 class="counter">
+    <span class="label">Days Since <%= @incident.name %></span>
     <span class="days"><%= @days %></span>
-    <span class="label">Days Since Last Incident</span>
   </h1>
   <button class="reset-button" phx-click="reset">RESET</button>
 </div>

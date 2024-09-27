@@ -11,14 +11,8 @@ defmodule Sector7g.DaysSince do
   require Logger
 
   def start_link([]) do
-    # TODO spawn with custom incident name
     GenServer.start_link(__MODULE__, "last_incident", name: __MODULE__)
   end
-
-  def reset_counter() do
-    GenServer.cast(__MODULE__, :reset)
-  end
-
   def reset_counter(incident_name) do
     GenServer.cast(__MODULE__, {:reset, incident_name})
   end
@@ -27,12 +21,12 @@ defmodule Sector7g.DaysSince do
     GenServer.cast(__MODULE__, {:new, incident_name})
   end
 
-  def days_since() do
-    GenServer.call(__MODULE__, :days_since)
-  end
-
   def days_since(incident_name) do
     GenServer.call(__MODULE__, {:days_since, incident_name})
+  end
+
+  def get_incident(incident_name) do
+    GenServer.call(__MODULE__, {:get, incident_name})
   end
 
   # =============================
@@ -42,59 +36,31 @@ defmodule Sector7g.DaysSince do
   @impl true
   def init(incident) do
     {:ok, init_date, 0} = DateTime.from_iso8601("2019-07-23T01:27:00+00:00")
-    case Incident.new_incident_changeset(incident, init_date) |> Repo.insert(on_conflict: :nothing) do
-      {:error, failed_insert} -> {:error, failed_insert.errors}
-      {:ok, _successful_insert} -> {:ok, %{incident: incident, last_incident: init_date}}
-    end
-  end
-
-  @impl true
-  def handle_cast(:reset, state) do
-    # TODO conjure useless metrics for this
-    {:noreply, state |> Map.put(:last_incident, DateTime.utc_now())}
+    Incident.insert_new_type_of_incident(incident, init_date)
   end
 
   @impl true
   def handle_cast({:reset, incident_name}, state) do
-    # TODO conjure useless metrics for this
-    case Repo.get_by(Incident, name: incident_name) do
-      nil -> {:error, :not_found} # TODO better error
-      record ->
-        record
-        |> Incident.changeset(%{incident_date: DateTime.utc_now()})
-        |> Repo.update()
-    end
-    # TODO move this to the case handling I guess
-    {:noreply, state |> Map.put(:last_incident, DateTime.utc_now())}
-  end
-
-
-  @impl true
-  def handle_call({:new, incident_name}, state) do
-    case Incident.new_incident_changeset(incident_name, DateTime.utc_now()) |> Repo.insert() do
-      {:ok, _new_incident} -> {:noreply, state} # TODO update state here
-      {:error, changeset_error} -> {:error, changeset_error.errors} # TODO differentiate b/w errors
-    end
+    Incident.reset_incident_counter_by_name(incident_name)
     {:noreply, state}
   end
 
   @impl true
-  def handle_call(:days_since, _from, state) do
-    {:reply, calculate_days_since(state.last_incident), state}
+  def handle_cast({:new, incident_name}, state) do
+    case Incident.new_incident_changeset(incident_name, DateTime.utc_now()) |> Repo.insert() do
+      {:ok, _new_incident} -> {:noreply, state} # TODO update state here
+      {:error, changeset_error} -> {:error, changeset_error.errors} # TODO differentiate b/w errors
+    end
   end
 
   @impl true
-  def handle_call({:days_since, _incident_name}, _from, state) do
-    # TODO implement me
-    {:reply, calculate_days_since(state.last_incident), state}
+  def handle_call({:days_since, incident_name}, _from, state) do
+    incident = Incident.get_incident_by_name(incident_name)
+    {:reply, incident.last_incident |> Incident.calculate_days_since_timestamp(), state}
   end
 
-  # =============================
-  # functions
-  # =============================
-  def calculate_days_since(utc_timestamp) do
-    DateTime.utc_now()
-    |> DateTime.diff(utc_timestamp, :day)
+  @impl true
+  def handle_call({:get, incident_name}, _from, state) do
+    {:reply, Incident.get_incident_by_name(incident_name), state}
   end
-
 end

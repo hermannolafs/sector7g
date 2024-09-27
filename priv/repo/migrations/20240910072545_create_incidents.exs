@@ -3,7 +3,7 @@ defmodule Sector7g.Repo.Migrations.CreateIncidents do
 
   def change do
     create table(:incidents) do
-      add :last_incident, :date
+      add :last_incident, :utc_datetime
       add :name, :string
 
       timestamps(type: :utc_datetime)
