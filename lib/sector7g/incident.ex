@@ -7,7 +7,7 @@ defmodule Sector7g.Incident do
   @topic "incidents"
 
   schema "incidents" do
-    field :last_incident, :date
+    field :last_incident, :utc_datetime
     field :name, :string
     # TODO add field for full_name or something more long form
 
@@ -50,6 +50,11 @@ defmodule Sector7g.Incident do
       nil -> {:error, :not_found} # TODO better error
       record -> {:ok, record}
       end
+  end
+
+  def calculate_days_since(utc_timestamp) do
+    DateTime.utc_now()
+    |> DateTime.diff(utc_timestamp, :day)
   end
 
   def reset_incident_counter(name) do
