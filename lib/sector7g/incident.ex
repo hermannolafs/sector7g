@@ -4,11 +4,12 @@ defmodule Sector7g.Incident do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @topic "incidents"
+  @topic "incidents" # This should probably not be here :thinking:
 
   schema "incidents" do
     field :last_incident, :utc_datetime
     field :name, :string
+    field :long_name, :string
     # TODO add field for full_name or something more long form
 
     timestamps(type: :utc_datetime)
@@ -34,6 +35,7 @@ defmodule Sector7g.Incident do
 
   # TODO add rm functionality
   def insert_new_type_of_incident(name, date \\ DateTime.utc_now()) do
+    Logger.debug(name)
     case %Incident{}
     |> changeset(%{name: name, last_incident: date})
     |> Sector7g.Repo.insert(on_conflict: :nothing) # TODO fix that it still pubs to the topic on conflict
