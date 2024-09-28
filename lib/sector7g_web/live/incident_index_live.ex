@@ -63,4 +63,8 @@ defmodule Sector7gWeb.IncidentIndexLive do
       "#{acc}#{k}: #{joined_errors}\n"
     end)
   end
+
+  defp incidents_exist?(incidents) do
+    length(incidents) > 0
+  end
 end
