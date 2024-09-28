@@ -4,8 +4,6 @@ defmodule Sector7g.Incident do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @topic "incidents" # This should probably not be here :thinking:
-
   schema "incidents" do
     field :last_incident, :utc_datetime
     field :name, :string
@@ -40,9 +38,7 @@ defmodule Sector7g.Incident do
     |> changeset(%{name: name, last_incident: date})
     |> Sector7g.Repo.insert(on_conflict: :nothing) # TODO fix that it still pubs to the topic on conflict
     do
-      {:ok, _successful_insert} ->
-        Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
-        {:ok, %{incident: name, last_incident: date}}
+      {:ok, _successful_insert} -> {:ok, %{incident: name, last_incident: date}}
       {:error, failed_insert} -> {:error, failed_insert.errors}
     end
   end
@@ -56,10 +52,7 @@ defmodule Sector7g.Incident do
     case Incident.get_incident_by_name(name)
     |> Sector7g.Incident.changeset(%{last_incident: DateTime.utc_now()})
     |> Sector7g.Repo.update() do
-      {:ok, reset_counter} ->
-        # TODO look into why this does not seem to propogate to the frontend
-        Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
-        {:ok, reset_counter}
+      {:ok, reset_counter} -> {:ok, reset_counter}
       {:error, error_changeset} -> {:error, error_changeset.errors}
     end
   end

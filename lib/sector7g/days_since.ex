@@ -10,6 +10,8 @@ defmodule Sector7g.DaysSince do
   use GenServer
   require Logger
 
+  @topic "incidents"
+
   def start_link([]) do
     # TODO Initializing the db should maybe be in another place
     GenServer.start_link(__MODULE__, "last_incident", name: __MODULE__)
@@ -43,13 +45,16 @@ defmodule Sector7g.DaysSince do
   @impl true
   def handle_cast({:reset, incident_name}, state) do
     Incident.reset_incident_counter_by_name(incident_name)
+    Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
     {:noreply, state}
   end
 
   @impl true
   def handle_cast({:new, incident_name}, state) do
     case Incident.new_incident_changeset(incident_name, DateTime.utc_now()) |> Repo.insert() do
-      {:ok, _new_incident} -> {:noreply, state} # TODO update state here
+      {:ok, _new_incident} ->
+        Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
+        {:noreply, state} # TODO update state here
       {:error, changeset_error} -> {:error, changeset_error.errors} # TODO differentiate b/w errors
     end
   end
