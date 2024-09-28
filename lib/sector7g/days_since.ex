@@ -11,6 +11,7 @@ defmodule Sector7g.DaysSince do
   require Logger
 
   def start_link([]) do
+    # TODO Initializing the db should maybe be in another place
     GenServer.start_link(__MODULE__, "last_incident", name: __MODULE__)
   end
   def reset_counter(incident_name) do
