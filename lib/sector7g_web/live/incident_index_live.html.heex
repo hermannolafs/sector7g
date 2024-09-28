@@ -1,11 +1,39 @@
 <div class="incident-index">
   <h1>Registered Incidents</h1>
-  <ul>
-    <%= for incident <- @incidents do %>
-      <li class="incident-item">
-        <span class="incident-name"><%= incident.name %></span>
-        <span class="incident-date">Last incident: <%= Calendar.strftime(incident.last_incident, "%Y-%m-%d") %></span>
-      </li>
+    <%= if incidents_exist?(@incidents) do %>
+    <ul>
+      <%= for incident <- @incidents do %>
+        <li class="incident-item">
+          <.link navigate={"/#{incident.name}"}>
+            <span class="incident-name">
+              <%= incident.name %>
+            </span>
+            <span class="incident-date">Last incident: <%= Calendar.strftime(incident.last_incident, "%Y-%m-%d") %></span>
+          </.link>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="no-incidents-message">
+      <p>There are no incidents registered yet. Click the plus button below to add your first incident.</p>
+    </div>
+  <% end %>
+
+    <div class="new-incident-section">
+    <%= if @show_form do %>
+      <form phx-submit="create_incident" class="new-incident-form">
+        <input type="text" name="name" value={@new_incident_name} placeholder="New incident name" required
+               phx-keyup="update_new_incident_name" phx-debounce="300" />
+        <button type="submit">Create</button>
+        <button type="button" phx-click="toggle_form">Cancel</button>
+      </form>
+    <% else %>
+      <button phx-click="toggle_form" class="add-incident-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+      </button>
     <% end %>
-  </ul>
+  </div> 
 </div>
