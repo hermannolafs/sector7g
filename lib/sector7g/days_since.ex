@@ -23,10 +23,6 @@ defmodule Sector7g.DaysSince do
     GenServer.cast(__MODULE__, {:new, incident_name})
   end
 
-  def days_since(incident_name) do
-    GenServer.call(__MODULE__, {:days_since, incident_name})
-  end
-
   def get_incident(incident_name) do
     GenServer.call(__MODULE__, {:get, incident_name})
   end
@@ -55,12 +51,6 @@ defmodule Sector7g.DaysSince do
         {:noreply, state} # TODO update state here
       {:error, changeset_error} -> {:error, changeset_error} # TODO differentiate b/w errors
     end
-  end
-
-  @impl true
-  def handle_call({:days_since, incident_name}, _from, state) do
-    incident = Incident.get_incident_by_name(incident_name)
-    {:reply, incident.last_incident |> Incident.calculate_days_since_timestamp(), state}
   end
 
   @impl true
