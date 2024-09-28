@@ -1,5 +1,6 @@
 defmodule Sector7g.Incident do
   require Logger
+  alias Ecto.Changeset
   alias Sector7g.Incident
   use Ecto.Schema
   import Ecto.Changeset
@@ -33,7 +34,7 @@ defmodule Sector7g.Incident do
     |> Sector7g.Repo.insert(on_conflict: :nothing) # TODO fix that it still pubs to the topic on conflict
     do
       {:ok, _successful_insert} -> {:ok, %{incident: name}}
-      {:error, failed_insert} -> {:error, failed_insert.errors}
+      {:error, failed_insert} -> {:error, failed_insert}
     end
   end
 
