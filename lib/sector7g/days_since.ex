@@ -6,7 +6,6 @@ defmodule Sector7g.DaysSince do
   # CLIENT
   # =============================
   alias Sector7g.Incident
-  alias Sector7g.Repo
   use GenServer
   require Logger
 
@@ -14,7 +13,7 @@ defmodule Sector7g.DaysSince do
 
   def start_link([]) do
     # TODO Initializing the db should maybe be in another place
-    GenServer.start_link(__MODULE__, "last_incident", name: __MODULE__)
+    GenServer.start_link(__MODULE__, [], name: __MODULE__)
   end
   def reset_counter(incident_name) do
     GenServer.cast(__MODULE__, {:reset, incident_name})
@@ -37,9 +36,8 @@ defmodule Sector7g.DaysSince do
   # =============================
 
   @impl true
-  def init(incident) do
-    {:ok, init_date, 0} = DateTime.from_iso8601("2019-07-23T01:27:00+00:00")
-    Incident.insert_new_type_of_incident(incident, init_date)
+  def init([]) do
+    {:ok, []}
   end
 
   @impl true
@@ -51,11 +49,11 @@ defmodule Sector7g.DaysSince do
 
   @impl true
   def handle_cast({:new, incident_name}, state) do
-    case Incident.new_incident_changeset(incident_name, DateTime.utc_now()) |> Repo.insert() do
+    case Incident.insert_new_type_of_incident(incident_name) do
       {:ok, _new_incident} ->
         Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
         {:noreply, state} # TODO update state here
-      {:error, changeset_error} -> {:error, changeset_error.errors} # TODO differentiate b/w errors
+      {:error, changeset_error} -> {:error, changeset_error} # TODO differentiate b/w errors
     end
   end
 

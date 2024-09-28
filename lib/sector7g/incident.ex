@@ -25,20 +25,14 @@ defmodule Sector7g.Incident do
   # doobydoobydoo
   # =============================
 
-  # TODO make it default in a more ecto way I guess
-  def new_incident_changeset(name, date \\ DateTime.utc_now()) do
-    %Incident{}
-    |> changeset(%{name: name, last_incident: date})
-  end
-
   # TODO add rm functionality
-  def insert_new_type_of_incident(name, date \\ DateTime.utc_now()) do
-    Logger.debug(name)
+  def insert_new_type_of_incident(name) do
+    {:ok, important_moment, _offset} = DateTime.from_iso8601("2019-07-23T01:27:00+00:00")
     case %Incident{}
-    |> changeset(%{name: name, last_incident: date})
+    |> changeset(%{name: name, last_incident: important_moment})
     |> Sector7g.Repo.insert(on_conflict: :nothing) # TODO fix that it still pubs to the topic on conflict
     do
-      {:ok, _successful_insert} -> {:ok, %{incident: name, last_incident: date}}
+      {:ok, _successful_insert} -> {:ok, %{incident: name}}
       {:error, failed_insert} -> {:error, failed_insert.errors}
     end
   end
