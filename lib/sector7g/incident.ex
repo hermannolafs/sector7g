@@ -7,7 +7,6 @@ defmodule Sector7g.Incident do
   schema "incidents" do
     field :last_incident, :utc_datetime
     field :name, :string
-    field :long_name, :string
     # TODO add field for full_name or something more long form
 
     timestamps(type: :utc_datetime)
