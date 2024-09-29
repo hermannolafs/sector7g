@@ -4,7 +4,7 @@
     <ul>
       <%= for incident <- @incidents do %>
         <li class="incident-item">
-          <.link navigate={"/#{incident.name}"}>
+          <.link navigate={"/#{incident.id}"}>
             <span class="incident-name">
               <%= incident.name %>
             </span>

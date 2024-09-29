@@ -3,8 +3,8 @@ defmodule Sector7gWeb.DaysSinceLive do
   use Sector7gWeb, :live_view
   require Logger
 
-  def mount(%{"name" => name}, _session, socket) do
-    record = Incident.get_incident_by_name(name)
+  def mount(%{"id" => id}, _session, socket) do
+    record = Incident.get_incident_by_id(id)
     {:ok, assign(socket, incident: record, days: Incident.calculate_days_since_timestamp(record.last_incident))}
   end
 

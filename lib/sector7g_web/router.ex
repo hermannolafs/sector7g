@@ -19,7 +19,7 @@ defmodule Sector7gWeb.Router do
     pipe_through :browser
 
     live "/", IncidentIndexLive, :home
-    live "/:name", DaysSinceLive
+    live "/:id", DaysSinceLive
   end
 
   # Other scopes may use custom stacks.
