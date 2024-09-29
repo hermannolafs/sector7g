@@ -1,6 +1,5 @@
 defmodule Sector7g.Incident do
   require Logger
-  alias Ecto.Changeset
   alias Sector7g.Incident
   use Ecto.Schema
   import Ecto.Changeset
@@ -26,11 +25,16 @@ defmodule Sector7g.Incident do
   # doobydoobydoo
   # =============================
 
+  defp default_date() do
+    {:ok, date_of_interest, _offset} = DateTime.from_iso8601("2019-08-10T06:30:00+00:00")
+    date_of_interest
+  end
+
   # TODO add rm functionality
   def insert_new_type_of_incident(name) do
-    {:ok, important_moment, _offset} = DateTime.from_iso8601("2019-07-23T01:27:00+00:00")
+
     case %Incident{}
-    |> changeset(%{name: name, last_incident: important_moment})
+    |> changeset(%{name: name, last_incident: default_date()})
     |> Sector7g.Repo.insert(on_conflict: :nothing) # TODO fix that it still pubs to the topic on conflict
     do
       {:ok, _successful_insert} -> {:ok, %{incident: name}}
@@ -41,6 +45,11 @@ defmodule Sector7g.Incident do
   def get_incident_by_name(name) do
     # This helper function is meant to ensure Ecto.NoResultsError being thrown
     Sector7g.Repo.get_by!(Incident, name: name)
+  end
+
+  def get_incident_by_id(id) do
+    # This helper function is meant to ensure Ecto.NoResultsError being thrown
+    Sector7g.Repo.get!(Incident, id)
   end
 
   def reset_incident_counter_by_name(name) do
