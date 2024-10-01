@@ -22,7 +22,7 @@ end
 
 if config_env() == :prod do
   database_path =
-    System.get_env("DATABASE_PATH") ||
+    System.get_env("DATABASE_PATH", "/app/sector7g.db") ||
       raise """
       environment variable DATABASE_PATH is missing.
       For example: /etc/sector7g/sector7g.db
