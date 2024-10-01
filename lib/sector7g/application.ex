@@ -11,8 +11,7 @@ defmodule Sector7g.Application do
       Sector7gWeb.Telemetry,
       Sector7g.Repo,
       {Ecto.Migrator,
-        repos: Application.fetch_env!(:sector7g, :ecto_repos),
-        skip: skip_migrations?()},
+        repos: Application.fetch_env!(:sector7g, :ecto_repos)},
       {DNSCluster, query: Application.get_env(:sector7g, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Sector7g.PubSub},
       # Start the Finch HTTP client for sending emails
@@ -38,8 +37,4 @@ defmodule Sector7g.Application do
     :ok
   end
 
-  defp skip_migrations?() do
-    # By default, sqlite migrations are run when using a release
-    System.get_env("RELEASE_NAME") != nil
-  end
 end
