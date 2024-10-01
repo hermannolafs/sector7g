@@ -21,9 +21,9 @@ defmodule Sector7g.MixProject do
       mod: {Sector7g.Application, []},
       extra_applications: [
         :logger,
-        :runtime_tools,
-        :wx,
-        :observer
+        :runtime_tools
+        # :wx,
+        # :observer
       ]
     ]
   end
