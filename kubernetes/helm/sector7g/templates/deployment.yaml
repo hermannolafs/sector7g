@@ -26,6 +26,11 @@ spec:
                 key: {{ .Values.ecto.baseKey.secret.key }}
           - name: DATABASE_PATH
             value: {{ .Values.ecto.dbPath }}
+          - name: PHX_HOST
+            value: {{ .Values.phoenix.host }}
+          - name: PHX_CHECK_ORIGIN
+            value: {{ .Values.phoenix.checkOrigin }}
+          
         ports:
           # TODO update the app to run on port 8080 ?
           # The app should be addressable on url http://sector7g:80 or https://sector7g:443

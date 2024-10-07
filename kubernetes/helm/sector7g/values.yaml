@@ -8,6 +8,11 @@ image:
 security:
   enabled: NO # https://noyaml.com/ there are 22 options to write "true" or "false."
 
+#  https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3-common-configuration
+phoenix:
+  host: "127.0.0.1"
+  checkOrigin: "//localhost:4000,//127.0.0.1:4000,//*.example.com"
+
 ecto:
   dbPath: "/app/sector7g.db" 
   baseKey:
