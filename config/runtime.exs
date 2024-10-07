@@ -49,8 +49,11 @@ if config_env() == :prod do
 
   config :sector7g, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
+
+  # https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3-common-configuration
   config :sector7g, Sector7gWeb.Endpoint,
     url: [host: host, port: 443, scheme: "https"],
+    check_origin: (System.get_env("PHX_CHECK_ORIGIN") || "localhost,127.0.01") |> String.split(","), # TODO make this work with true/false
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
