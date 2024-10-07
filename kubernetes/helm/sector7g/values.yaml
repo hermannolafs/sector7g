@@ -1,0 +1,19 @@
+replicaCount: 1
+
+image:
+  repository: sector7g
+  tag: "latest"
+  pullPolicy: "Always"
+
+security:
+  enabled: NO # https://noyaml.com/ there are 22 options to write "true" or "false."
+
+ecto:
+  dbPath: "/app/sector7g.db" 
+  baseKey:
+    secret: 
+      name: "ecto.basekey"
+      key: "secret_key"
+    hardcoded: true
+    # This value is ignored if hardcoded is set to false
+    value: "IFvLZpso9kLZ2WezKuG6sGAbxU8ljmoYCg+Ei1yNeqLczKVtTCUOhnTKEMprLBn1" # There is nothing that matters in the db anyway who cares 
