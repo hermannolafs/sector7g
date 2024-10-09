@@ -1,0 +1,7 @@
+Sector7g !
+
+DB is found at path
+>> {{ .Values.ecto.dbPath }}
+
+Allowed origins:
+>> {{ .Values.phoenix.checkOrigin }}

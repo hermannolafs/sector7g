@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  repository: sector7g
+  tag: "latest"
+  pullPolicy: "Always"
+
+#  https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3-common-configuration
+phoenix:
+  host: "127.0.0.1"
+  checkOrigin: "//localhost:4000,//127.0.0.1:4000,//*.example.com"
+
+persistence:
+  name: "" # Defaults to .Release.Name
+  # For bringing your own PVC, set persistence.name
+  enabled: false
+  size: 1Gi
+  storageClass: default
+
+ecto:
+  dbPath: "/app/db" # probably bad to mount into the /app folder but I do not care 
+  baseKey:
+    secret: 
+      name: "ecto.basekey"
+      key: "secret_key"
+    hardcoded: true
+    # This value is ignored if hardcoded is set to false
+    # There is nothing that matters in the db anyway who cares 
+    # value: "cool secure string"
