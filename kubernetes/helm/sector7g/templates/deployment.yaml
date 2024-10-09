@@ -4,34 +4,52 @@ metadata:
   name: {{ .Release.Name }}
   labels:
     app: {{ .Release.Name }}
+
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: {{ .Release.Name }}
+
   template:
     metadata:
       labels:
         app: {{ .Release.Name }}
+
     spec:
+      securityContext:
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+
+      volumes:
+        - name: sqlite
+          {{- if or .Values.persistence.enabled (ne .Values.persistence.name "") }}
+          persistentVolumeClaim:
+            claimName: {{ default .Release.Name .Values.persistence.name }}
+          {{- end }}
+
       containers:
-      - name: {{ .Chart.Name }}
-        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
-        env:
-          - name: SECRET_KEY_BASE
-            valueFrom: 
-              secretKeyRef:
-                name: {{ .Values.ecto.baseKey.secret.name }}
-                key: {{ .Values.ecto.baseKey.secret.key }}
-          - name: DATABASE_PATH
-            value: {{ .Values.ecto.dbPath }}
-          - name: PHX_HOST
-            value: {{ .Values.phoenix.host }}
-          - name: PHX_CHECK_ORIGIN
-            value: {{ .Values.phoenix.checkOrigin }}
-          
-        ports:
-          # TODO update the app to run on port 8080 ?
-          # The app should be addressable on url http://sector7g:80 or https://sector7g:443
-        - containerPort: 4000
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: SECRET_KEY_BASE
+              valueFrom: 
+                secretKeyRef:
+                  name: {{ .Values.ecto.baseKey.secret.name }}
+                  key: {{ .Values.ecto.baseKey.secret.key }}
+            - name: DATABASE_PATH
+              value: "{{ .Values.ecto.dbPath }}/sector7g.db"
+            - name: PHX_HOST
+              value: {{ .Values.phoenix.host }}
+            - name: PHX_CHECK_ORIGIN
+              value: {{ .Values.phoenix.checkOrigin }}
+            
+          ports:
+            # TODO update the app to run on port 8080 ?
+            # The app should be addressable on url http://sector7g:80 or https://sector7g:443
+            - containerPort: 4000
+          volumeMounts:
+            - name: sqlite
+              mountPath: {{ .Values.ecto.dbPath }}
