@@ -5,9 +5,6 @@ image:
   tag: "latest"
   pullPolicy: "Always"
 
-# security:
-#   enabled: NO # https://noyaml.com/ there are 22 options to write "true" or "false."
-
 #  https://hexdocs.pm/phoenix/Phoenix.Endpoint.html#socket/3-common-configuration
 phoenix:
   host: "127.0.0.1"
@@ -29,4 +26,4 @@ ecto:
     hardcoded: true
     # This value is ignored if hardcoded is set to false
     # There is nothing that matters in the db anyway who cares 
-    value: "IFvLZpso9kLZ2WezKuG6sGAbxU8ljmoYCg+Ei1yNeqLczKVtTCUOhnTKEMprLBn1"
+    # value: "cool secure string"
