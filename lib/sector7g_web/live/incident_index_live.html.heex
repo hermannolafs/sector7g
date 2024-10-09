@@ -4,7 +4,7 @@
     <ul>
       <%= for incident <- @incidents do %>
         <li class="incident-item">
-          <.link navigate={"/#{incident.name}"}>
+          <.link navigate={"/#{incident.id}"}>
             <span class="incident-name">
               <%= incident.name %>
             </span>
@@ -23,7 +23,8 @@
     <%= if @show_form do %>
       <form phx-submit="create_incident" class="new-incident-form">
         <input type="text" name="name" value={@new_incident_name} placeholder="New incident name" required
-               phx-keyup="update_new_incident_name" phx-debounce="300" />
+               phx-keyup="update_new_incident_name" phx-debounce="300"
+               id="new-incident-input" phx-hook="FocusInput" />
         <button type="submit">Create</button>
         <button type="button" phx-click="toggle_form">Cancel</button>
       </form>

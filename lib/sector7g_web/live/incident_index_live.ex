@@ -44,6 +44,7 @@ defmodule Sector7gWeb.IncidentIndexLive do
     end
   end
 
+  # This is probably a stupid thing to do but it's fun
   def handle_event("update_new_incident_name", %{"value" => value}, socket) do
     {:noreply, assign(socket, new_incident_name: value)}
   end

@@ -20,7 +20,7 @@ defmodule Sector7g.DaysSince do
   end
 
   def new(incident_name) do
-    GenServer.cast(__MODULE__, {:new, incident_name})
+    GenServer.call(__MODULE__, {:new, incident_name})
   end
 
   def get_incident(incident_name) do
@@ -44,12 +44,12 @@ defmodule Sector7g.DaysSince do
   end
 
   @impl true
-  def handle_cast({:new, incident_name}, state) do
+  def handle_call({:new, incident_name}, _from, state) do
     case Incident.insert_new_type_of_incident(incident_name) do
       {:ok, _new_incident} ->
         Phoenix.PubSub.broadcast(Sector7g.PubSub, @topic, {:incident_updated})
-        {:noreply, state} # TODO update state here
-      {:error, changeset_error} -> {:error, changeset_error} # TODO differentiate b/w errors
+        {:reply, :ok, state} # TODO update state here
+      {:error, _changeset_error} = error -> {:reply, error, state}
     end
   end
 
