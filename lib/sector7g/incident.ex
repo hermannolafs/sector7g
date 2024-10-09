@@ -7,7 +7,6 @@ defmodule Sector7g.Incident do
   schema "incidents" do
     field :last_incident, :utc_datetime
     field :name, :string
-    field :long_name, :string
     # TODO add field for full_name or something more long form
 
     timestamps(type: :utc_datetime)
@@ -35,7 +34,7 @@ defmodule Sector7g.Incident do
 
     case %Incident{}
     |> changeset(%{name: name, last_incident: default_date()})
-    |> Sector7g.Repo.insert(on_conflict: :nothing) # TODO fix that it still pubs to the topic on conflict
+    |> Sector7g.Repo.insert(on_conflict: :raise) # TODO fix that it still pubs to the topic on conflict
     do
       {:ok, _successful_insert} -> {:ok, %{incident: name}}
       {:error, failed_insert} -> {:error, failed_insert}
