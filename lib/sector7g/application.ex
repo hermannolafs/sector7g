@@ -5,22 +5,19 @@ defmodule Sector7g.Application do
 
   use Application
 
+  require Logger
+
   @impl true
-  def start(_type, _args) do
+  def start(_type, []) do
     children = [
-      Sector7gWeb.Telemetry,
+      Sector7gWeb.Endpoint,
+    ] ++ telemetry_children?() ++ [
       Sector7g.Repo,
       {Ecto.Migrator,
         repos: Application.fetch_env!(:sector7g, :ecto_repos)},
       {DNSCluster, query: Application.get_env(:sector7g, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Sector7g.PubSub},
-      # Start the Finch HTTP client for sending emails
-      # {Finch, name: Sector7g.Finch},
-      # Start a worker by calling: Sector7g.Worker.start_link(arg)
-      # {Sector7g.Worker, arg},
-      # Start to serve requests, typically the last entry
       Sector7g.DaysSince,
-      Sector7gWeb.Endpoint
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -37,4 +34,17 @@ defmodule Sector7g.Application do
     :ok
   end
 
+  def telemetry_children? do
+    if telemetry_enabled?() do
+      Logger.info("Telemetry enabled")
+      [Sector7g.PromEx, Sector7gWeb.Telemetry]
+    else
+      Logger.warning("Telemtry disabled")
+      []
+    end
+  end
+
+  def telemetry_enabled? do
+    Application.get_env(:sector7g, :telemetry_enabled)
+  end
 end

@@ -20,6 +20,16 @@ if System.get_env("PHX_SERVER") do
   config :sector7g, Sector7gWeb.Endpoint, server: true
 end
 
+# There is probably a better way to do this but this works
+defmodule Read do
+  def read_bool(nil), do: true
+  def read_bool(string), do: string |> String.downcase() |> bool()
+  def bool("true"), do: true
+  def bool("false"), do: false
+end
+
+config :sector7g, telemetry_enabled: System.get_env("PHX_TELEMETRY_ENABLED") |> Read.read_bool()
+
 if config_env() == :prod do
   database_path =
     System.get_env("DATABASE_PATH", "/app/sector7g.db") ||

@@ -15,6 +15,12 @@ spec:
     metadata:
       labels:
         app: {{ .Release.Name }}
+      annotations:
+      {{- if .Values.phoenix.metrics.enabled }}
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "4000"
+      {{- end }}
 
     spec:
       securityContext:
@@ -41,10 +47,14 @@ spec:
                   key: {{ .Values.ecto.baseKey.secret.key }}
             - name: DATABASE_PATH
               value: "{{ .Values.ecto.dbPath }}/sector7g.db"
+
+            # Phoenix application config
             - name: PHX_HOST
               value: {{ .Values.phoenix.host }}
             - name: PHX_CHECK_ORIGIN
               value: {{ .Values.phoenix.checkOrigin }}
+            - name: PHX_TELEMETRY_ENABLED
+              value: {{ quote .Values.phoenix.metrics.enabled }} 
             
           ports:
             # TODO update the app to run on port 8080 ?
