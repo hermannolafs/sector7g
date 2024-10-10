@@ -61,11 +61,11 @@ defmodule Sector7g.PromEx do
     [
       # PromEx built in plugins
       Plugins.Application,
-      Plugins.Beam
-      # {Plugins.Phoenix, router: Sector7gWeb.Router, endpoint: Sector7gWeb.Endpoint},
-      # Plugins.Ecto,
+      Plugins.Beam,
+      {Plugins.Phoenix, router: Sector7gWeb.Router, endpoint: Sector7gWeb.Endpoint},
+      Plugins.Ecto,
       # Plugins.Oban,
-      # Plugins.PhoenixLiveView,
+      Plugins.PhoenixLiveView,
       # Plugins.Absinthe,
       # Plugins.Broadway,
 
@@ -87,11 +87,11 @@ defmodule Sector7g.PromEx do
     [
       # PromEx built in Grafana dashboards
       {:prom_ex, "application.json"},
-      {:prom_ex, "beam.json"}
-      # {:prom_ex, "phoenix.json"},
-      # {:prom_ex, "ecto.json"},
+      {:prom_ex, "beam.json"},
+      {:prom_ex, "phoenix.json"},
+      {:prom_ex, "ecto.json"},
       # {:prom_ex, "oban.json"},
-      # {:prom_ex, "phoenix_live_view.json"},
+      {:prom_ex, "phoenix_live_view.json"},
       # {:prom_ex, "absinthe.json"},
       # {:prom_ex, "broadway.json"},
 
