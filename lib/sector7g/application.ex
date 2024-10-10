@@ -5,12 +5,13 @@ defmodule Sector7g.Application do
 
   use Application
 
+  require Logger
+
   @impl true
-  def start(_type, _args) do
+  def start(_type, []) do
     children = [
       Sector7gWeb.Endpoint,
-      Sector7g.PromEx,
-      Sector7gWeb.Telemetry,
+    ] ++ telemetry_children?() ++ [
       Sector7g.Repo,
       {Ecto.Migrator,
         repos: Application.fetch_env!(:sector7g, :ecto_repos)},
@@ -33,4 +34,17 @@ defmodule Sector7g.Application do
     :ok
   end
 
+  def telemetry_children? do
+    if telemetry_enabled?() do
+      Logger.info("Telemetry enabled")
+      [Sector7g.PromEx, Sector7gWeb.Telemetry]
+    else
+      Logger.warning("Telemtry disabled")
+      []
+    end
+  end
+
+  def telemetry_enabled? do
+    Application.get_env(:sector7g, :telemetry_enabled)
+  end
 end
