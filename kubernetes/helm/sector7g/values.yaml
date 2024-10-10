@@ -9,6 +9,8 @@ image:
 phoenix:
   host: "127.0.0.1"
   checkOrigin: "//localhost:4000,//127.0.0.1:4000,//*.example.com"
+  metrics: 
+    enabled: true
 
 persistence:
   name: "" # Defaults to .Release.Name
