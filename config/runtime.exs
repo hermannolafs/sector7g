@@ -28,7 +28,6 @@ defmodule Read do
   def bool("false"), do: false
 end
 
-# config :sector7g, telemetry_enabled: System.get_env("PHX_TELEMETRY_ENABLED") |> String.downcase() || "true" |> Bool.bool()
 config :sector7g, telemetry_enabled: System.get_env("PHX_TELEMETRY_ENABLED") |> Read.read_bool()
 
 if config_env() == :prod do
