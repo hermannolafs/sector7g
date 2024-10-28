@@ -6,10 +6,7 @@
 name: Elixir Build and push
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # I hate latest and releases should be stable
   release:
     types: [ published ]
 
