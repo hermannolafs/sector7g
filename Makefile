@@ -4,7 +4,7 @@ iex-dbg:
 	iex --dbg pry -S mix phx.server
 
 docker-build:
-	docker build -t sector7g:latest .
+	docker build -t ghcr.io/hermannolafs/sector7g:latest .
 
 # TODO rethink tagging here
 docker-build-and-load-minikube: docker-clean docker-build
