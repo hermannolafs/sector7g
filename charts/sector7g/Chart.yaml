@@ -5,5 +5,5 @@ description: A Helm chart for deploying Sector7g in Kubernetes
 type: application
 
 # Set during build
-version: "N/A"
-appVersion: "N/A"
+version: "0.0.0"
+appVersion: "0.0.0"
