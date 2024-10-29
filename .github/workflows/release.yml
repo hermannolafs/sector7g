@@ -63,7 +63,7 @@ jobs:
         working-directory: charts
         run: |
           mkdir tarball
-          helm package --dependency-update sector7g --version ${GITHUB_REF_NAME} /tarball
+          helm package --dependency-update sector7g --version ${GITHUB_REF_NAME} --destination /tarball
 
       - name: Login with ephemeral token to ghcr.io
         working-directory: charts
