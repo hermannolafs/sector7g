@@ -67,10 +67,10 @@ jobs:
       - name: Run chart-releaser
         uses: bitdeps/helm-oci-charts-releaser@v0.1.0
         with:
-            oci_registry: ghcr.io/hermannolafs
-            oci_username: hermannolafs
-            oci_password: ${{ secrets.GITHUB_TOKEN }}
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            tag_name_pattern: '{chartName}-chart'
-            mark_as_latest: false
-            skip_existing: true
+          oci_registry: ghcr.io/hermannolafs
+          oci_username: hermannolafs
+          oci_password: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name_pattern: '{chartName}-chart'
+          mark_as_latest: false
+          skip_existing: true
