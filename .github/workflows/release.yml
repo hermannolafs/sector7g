@@ -62,7 +62,7 @@ jobs:
       - name: Package Helm chart
         working-directory: charts
         run: |
-          helm package --dependency-update sector7g --version ${GITHUB_REF_NAME}
+          helm package --dependency-update sector7g --version ${GITHUB_REF_NAME} --version ${GITHUB_REF_NAME}
       - name: Login with ephemeral token to ghcr.io
         working-directory: charts
         run: |
