@@ -62,9 +62,7 @@ jobs:
       - name: Package Helm chart
         working-directory: charts
         run: |
-          mkdir tarball
-          helm package --dependency-update sector7g --version ${GITHUB_REF_NAME} --destination /tarball
-
+          helm package --dependency-update sector7g --version ${GITHUB_REF_NAME}
       - name: Login with ephemeral token to ghcr.io
         working-directory: charts
         run: |
@@ -73,7 +71,7 @@ jobs:
       - name: Push Helm chart to oci://ghcr.io
         working-directory: charts
         run: |
-          helm push tarball/sector7g-${GITHUB_REF_NAME}.tgz oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/charts
+          helm push sector7g-${GITHUB_REF_NAME}.tgz oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/charts
 
     # helm push package/sector7g-${GITHUB_REF_NAME}.tgz oci://ghcr.io/hermannolafs/sector7g-chart
 
