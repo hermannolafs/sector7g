@@ -59,16 +59,9 @@ jobs:
       # ==================
       # Helm
       # ==================
-      - name: Configure Git
+      - name: Upload OCI Helm chart
         run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          printenv
+          helm package --dependency-update sector7g --destination package/
+          helm push package/sector7g-0.2.0.tgz oci://ghcr.io/hermannolafs/sector7g-chart
 
-      - name: Run chart-releaser
-        uses: bitdeps/helm-oci-charts-releaser@v0.1.2
-        with:
-          oci_registry: ghcr.io/hermannolafs
-          oci_username: hermannolafs
-          oci_password: ${{ secrets.GITHUB_TOKEN }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          charts_dir: charts/sector7g
