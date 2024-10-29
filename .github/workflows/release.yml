@@ -25,36 +25,36 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # # ==================
-      # # Elixir
-      # # ==================
-      # - name: Set up Elixir
-      #   uses: erlef/setup-beam@61e01a43a562a89bfc54c7f9a378ff67b03e4a21 # v1.16.0
-      #   with:
-      #     elixir-version: '1.15.2' # [Required] Define the Elixir version
-      #     otp-version: '26.0'      # [Required] Define the Erlang/OTP version
+      # ==================
+      # Elixir
+      # ==================
+      - name: Set up Elixir
+        uses: erlef/setup-beam@61e01a43a562a89bfc54c7f9a378ff67b03e4a21 # v1.16.0
+        with:
+          elixir-version: '1.15.2' # [Required] Define the Elixir version
+          otp-version: '26.0'      # [Required] Define the Erlang/OTP version
 
-      # - name: Restore dependencies cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: deps
-      #     key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
-      #     restore-keys: ${{ runner.os }}-mix-
+      - name: Restore dependencies cache
+        uses: actions/cache@v3
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: ${{ runner.os }}-mix-
 
-      # - name: Install dependencies
-      #   run: mix deps.get
+      - name: Install dependencies
+        run: mix deps.get
 
-      # - name: Run tests
-      #   run: mix test
+      - name: Run tests
+        run: mix test
 
-      # # ==================
-      # # Container
-      # # ==================
-      # - name: Build and publish a Docker image for ${{ github.repository }}
-      #   uses: macbre/push-to-ghcr@master
-      #   with:
-      #     image_name: ${{ github.repository }}  # it will be lowercased internally
-      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      # ==================
+      # Container
+      # ==================
+      - name: Build and publish a Docker image for ${{ github.repository }}
+        uses: macbre/push-to-ghcr@master
+        with:
+          image_name: ${{ github.repository }}  # it will be lowercased internally
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       # ==================
       # Helm
@@ -72,6 +72,3 @@ jobs:
         working-directory: charts
         run: |
           helm push sector7g-${GITHUB_REF_NAME}.tgz oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/charts
-
-    # helm push package/sector7g-${GITHUB_REF_NAME}.tgz oci://ghcr.io/hermannolafs/sector7g-chart
-
