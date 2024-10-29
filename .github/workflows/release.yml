@@ -71,6 +71,4 @@ jobs:
           oci_username: hermannolafs
           oci_password: ${{ secrets.GITHUB_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name_pattern: '{chartName}-chart'
           charts_dir: charts
-          mark_as_latest: false
