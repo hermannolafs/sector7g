@@ -73,4 +73,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_name_pattern: '{chartName}-chart'
           mark_as_latest: false
-          skip_existing: true
